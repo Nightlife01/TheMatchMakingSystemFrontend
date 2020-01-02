@@ -1,0 +1,274 @@
+<div class="container justify-content-center">
+  <h1>Gebruikers beheren</h1>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal"
+          (click)="onClickRegisterUser()">Gebruiker toevoegen
+  </button>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Makers</h5>
+      <div class="card-text">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">MakerID</th>
+            <th scope="col">Gebruiker</th>
+            <th scope="col">Nickname</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let maker of (makers | async)">
+            <td>{{maker.makerID}}</td>
+            <td>{{maker.user.firstName}} {{maker.user.lastName}}</td>
+            <td>{{maker.nickname}}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makerModal"
+                      (click)="onClickBewerkMaker(maker)">Bewerk
+              </button>
+              <button type="button" class="btn btn-danger"
+                      (click)="onCLickVerwijderMaker(maker)">Verwijder
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Bedrijven</h5>
+        <div class="card-text">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th scope="col">CompanyID</th>
+              <th scope="col">Gebruiker</th>
+              <th scope="col">Naam</th>
+              <th *ngIf="bigData" scope="col">Locatie</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bedrijf of (bedrijven | async)">
+              <td>{{bedrijf.companyID}}</td>
+              <td>{{bedrijf.user.firstName}} {{bedrijf.user.lastName}}</td>
+              <td>{{bedrijf.name}}</td>
+              <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bedrijfModal"
+                        (click)="onClickBewerkBedrijf(bedrijf)">Bewerk
+                </button>
+                <button type="button" class="btn btn-danger"
+                        (click)="onCLickVerwijderBedrijf(bedrijf)">Verwijder
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="makerModal" tabindex="-1" role="dialog" aria-labelledby="makerModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="makerModalLabel">{{title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form (ngSubmit)="onSubmitOpslaanMaker()" [formGroup]="makerForm">
+            <div class="modal-body">
+              <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+              <div class="form-group">
+                <label for="inputGroupSelectMakerType" class="col-form-label">Type:</label>
+                <select class="custom-select" id="inputGroupSelectMakerType" formControlName="makerTypeID" [(ngModel)]="SelectMakerTypeID">
+                  <option hidden value="0" selected>Kies type...</option>
+                  <option *ngFor="let makerType of (makerTypes | async)"
+                          value="{{makerType.makerTypeID}}">{{makerType.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                
+                <div class="customFlexContainer" *ngIf="!createMode">
+                  <div class="userPresentationSpace">
+                    {{maker?.user.firstName}} {{maker?.user.lastName}}
+                  </div>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal"
+                          (click)="onClickEditUser(user)">Bewerk gebruiker
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="nickname" class="col-form-label">Nickname:</label>
+                <input type="text" class="form-control" id="nickname" value="{{maker?.nickname}}"
+                       formControlName="nickname">
+              </div>
+              <div class="form-group">
+                <label for="birthDate" class="col-form-label">Geboortedatum:</label>
+                <input type="date" class="form-control" id="birthDate"
+                       formControlName="birthDate" [(ngModel)]="birthdate">
+              </div>
+              <div class="form-group">
+                <label for="biography" class="col-form-label">Biografie:</label>
+                <input type="text" class="form-control" id="biography" value="{{maker?.biography}}"
+                       formControlName="biography">
+              </div>
+              <div class="form-group">
+                <label for="linkedIn" class="col-form-label">LinkedIn:</label>
+                <input type="text" class="form-control" id="linkedIn" value="{{maker?.linkedIn}}"
+                       formControlName="linkedIn">
+              </div>
+              <div class="form-group">
+                <label for="experience" class="col-form-label">Ervaring:</label>
+                <input type="text" class="form-control" id="experience" value="{{maker?.experience}}"
+                       formControlName="experience">
+              </div>
+              <div class="form-group">
+                <label for="contactInfo" class="col-form-label">Contact info:</label>
+                <input type="text" class="form-control" id="contactInfo" value="{{maker?.contactInfo}}"
+                       formControlName="contactInfo">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!makerForm.valid || submitted || SelectMakerTypeID == 0">Opslaan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="bedrijfModal" tabindex="-1" role="dialog" aria-labelledby="bedrijfModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bedrijfModalLabel">{{title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="form-group">
+                
+            <div class="customFlexContainer">
+              <div class="userPresentationSpace">
+                {{bedrijf?.user.firstName}} {{bedrijf?.user.lastName}}
+              </div>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal"
+                      (click)="onClickEditUser(user)">Bewerk gebruiker
+              </button>
+            </div>
+          </div>
+          <form (ngSubmit)="onSubmitOpslaanBedrijf()" [formGroup]="bedrijfForm">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="name" class="col-form-label">Naam:</label>
+                <input type="text" class="form-control" id="name" value="{{bedrijf?.name}}"
+                       formControlName="name">
+              </div>
+              <div class="form-group">
+                <label for="location" class="col-form-label">Locatie:</label>
+                <input type="text" class="form-control" id="location" value="{{bedrijf?.location}}"
+                       formControlName="location">
+              </div>
+              <div class="form-group">
+                <label for="biographyCompany" class="col-form-label">Biografie:</label>
+                <input type="text" class="form-control" id="biographyCompany" value="{{bedrijf?.biography}}"
+                       formControlName="biographyCompany">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!bedrijfForm.valid || submitted">Opslaan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="makerModalLabel">{{title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form (ngSubmit)="onSubmitRegisterUser()" [formGroup]="registrationForm">
+              <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+              <div class="form-group">
+      
+                <div *ngIf="createMode" class="form-group">
+                  <label for="role">Statuut:</label>
+                  <select class="form-control" id="role" required formControlName="Role" [(ngModel)]="SelectUserRole">
+                    <option hidden value="0" selected>Kies statuut...</option>
+                    <option *ngFor="let role of Roles" [value]="role">{{role}}</option>
+                  </select>
+                </div>
+      
+              </div>
+              <div class="form-group">
+                <label for="firstName">Voornaam:</label>
+                <input type="text" class="form-control" id="firstName" placeholder="First name" formControlName="firstName"/>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Familienaam:</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Last name" formControlName="lastName"/>
+              </div>
+              <div class="form-group">
+                <label for="mail">E-mail:</label>
+                <input type="email" class="form-control" id="mail" placeholder="E-mail" formControlName="email"/>
+              </div>
+              <div class="form-group">
+                <label for="password">Wachtwoord:</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+              </div>
+              <div *ngIf="createMode" class="form-group">
+                <label for="controlpassword">Herhaal wachtwoord:</label>
+                <input type="password" class="form-control" id="controlpassword" placeholder="Repeat password" formControlName="controlPassword">
+              </div>
+      
+
+              <button type="submit" *ngIf="!createMode" class="btn btn-success mt-3" [disabled]="!registrationForm.valid || submitted">
+                Bewerken
+              </button>
+
+              <button type="submit" *ngIf="createMode" class="btn btn-success mt-3" [disabled]="!registrationForm.valid || submitted || SelectUserRole == 0">Registreren</button>
+            </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':displayOpslaan}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-success">Succesvol opgeslagen!</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onClosedHandled()" >Sluit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':displayDelete}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-danger">Ben je zeker dat je deze Gebruiker wilt verwijderen?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onDeleteHandled()" >Ja</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onClosedHandled()" >Nee</button>
+      </div>
+    </div>
+  </div>
+</div>

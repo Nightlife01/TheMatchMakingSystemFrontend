@@ -1,0 +1,29 @@
+<div class="col-lg-4 col-sm-10 col-m-10 mt-3 myCard container justify-content-center">
+  <div class="card myCard shadow-sm">
+    <div class="card-body">
+      <p *ngIf="errorBool" class="text-danger">{{errormessage}}</p>
+      <div style="margin-top: 2% ;" class="">
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+
+          <h1>Inloggen:</h1>
+
+          <div class="mt-4 form-group">
+            <label for="email">E-mail:</label>
+            <input type="text" class="form-control" id="email" placeholder="E-mail"
+                   [(ngModel)]="model.Email" name="email"/>
+          </div>
+
+          <div class="mt-4 form-group">
+            <label for="wachtwoord">Wachtwoord:</label>
+            <input type="password" class="form-control" id="wachtwoord" placeholder="Wachtwoord"
+                   [(ngModel)]="model.Password" name="wachtwoord" [type]="hide ? 'password' : 'text'" required>
+
+          </div>
+
+          <button type="submit" class="btn btn-success kleur mt-4" [disabled]="!loginForm.form.valid || submitted">Inloggen</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

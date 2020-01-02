@@ -1,0 +1,37 @@
+<div class="container justify-content-center">
+  <h1>Tags beheren</h1>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Tag toevoegen</h5>
+      <form (ngSubmit)="onSubmit()" [formGroup]="tagForm">
+        <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+        <div class="form-group">
+          <label for="name">Naam:</label>
+          <input type="text" class="form-control" id="name" placeholder="Naam"
+                 formControlName="name"/>
+        </div>
+        <button type="submit" class="btn btn-success mt-3" [disabled]="!tagForm.valid || submitted">Voeg tag toe
+        </button>
+      </form>
+      <h5 class="card-title">Tags</h5>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">tagID</th>
+          <th scope="col">Naam</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let tag of (tags | async)">
+          <td>{{tag.tagID}}</td>
+          <td>{{tag.name}}</td>
+          <td>
+            <button type="button" class="btn btn-danger" (click)="onClickVerwijderTag(tag.tagID)">Verwijder</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

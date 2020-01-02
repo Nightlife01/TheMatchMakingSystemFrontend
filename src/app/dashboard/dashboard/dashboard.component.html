@@ -1,0 +1,167 @@
+<div class="ml-3 mr-3 mt-3">
+  <div class="">
+    <!--    -->
+    <!--    Linkerkant van de pagina-->
+    <!--    -->
+    <div class="sidebar">
+      <div class="filters">
+        <h2>Filters:</h2>
+        <div *ngFor="let tag of tags" class="form-check mycheckbox ml-3" (change)="onSelectionChangeTags(tag)">
+          <input class="form-check-input" type="checkbox" value="{{tag.tagID}}" id="tag">
+          <label class="form-check-label" for="tag">
+            {{tag.name}}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--    <div class="border-right"></div>-->
+
+    <!--    -->
+    <!--    Rechterkant van de pagina-->
+    <!--    -->
+    <div class="content">
+      <button *ngIf="isCompany" type="button" class="btn btn-success"
+              data-toggle="modal" data-target="#opdrachtModal">Opdracht toevoegen
+      </button>
+      <h2 class="mb-3" *ngIf="!isCompany">Beschikbare opdrachten</h2>
+      <h2 class="mb-3" *ngIf="isCompany">Onze opdrachten</h2>
+      <input type="text" class="form-control mb-3" [(ngModel)]="searchText" placeholder="Zoeken...">
+
+      <div class="card myCard mt-4 shadow-sm" *ngFor="let opdracht of filterOpdrachten | filter: searchText;">
+        <div class="card-body">
+          <h5 class="card-title">{{opdracht.title}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted"><span class="mr-3 badge badge-secondary"
+                                                          *ngFor="let tag of opdracht.listTags">{{tag.name}}</span></h6>
+          <p class="card-text">{{opdracht.description}}</p>
+          <span class="ml-1">
+            <button *ngIf="isMaker" type="button" class="btn btn-success"
+                    (click)="assignmentAanvragen(opdracht)">Aanvragen</button>
+            <label
+              *ngIf="isCompany && opdracht.maker == null && opdracht.listAssignmentRequests.length > 0">{{opdracht.listAssignmentRequests.length}}
+              sollicitant(en)</label>
+            <label *ngIf="isCompany && opdracht.maker != null">Opdracht toegekend aan {{opdracht.maker.user.firstName}}
+              {{opdracht.maker.user.lastName}}
+            </label>
+          </span>
+
+          <span class="ml-1">
+            <button *ngIf="isMaker" type="button" class="btn mybtn btn-dark" data-toggle="modal"
+                    data-target="#exampleModal" (click)="showBedrijfInfo(opdracht)">Bedrijf info</button>
+            <button *ngIf="isCompany && opdracht.maker == null && opdracht.listAssignmentRequests.length > 0"
+              type="button" data-toggle="modal" data-target="#makersModal" class="ml-2 btn btn-outline-secondary btn-sm"
+              (click)="makersOphalen(opdracht)">Sollicitanten bekijken</button>
+            <button *ngIf="isCompany && opdracht.maker != null" type="button" class="ml-2 btn btn-outline-secondary btn-sm"
+              (click)="goToMakerProfile(opdracht.maker.makerID)">Profiel bekijken</button>
+             <button *ngIf="isCompany && opdracht.maker != null" type="button" class="ml-2 btn btn-outline-success btn-sm"
+                     (click)="newMakerReview(opdracht.maker.userID, opdracht)" data-toggle="modal" data-target="#reviewModal">Review schrijven</button>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel">Review schrijven</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-review *ngIf="selectedReceiverID" [companyID]="selectedReceiverID" [assignmentID]="selectedReviewAssignment.assignmentID" [currentUID]="currentUID"></app-review>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="close()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Bedrijf info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-bedrijf-profiel *ngIf="selectedCompanyID" [companyID]="selectedCompanyID"></app-bedrijf-profiel>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="close()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal makers-->
+<div class="modal fade" id="makersModal" tabindex="-1" role="dialog" aria-labelledby="#makersModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="makersModalLabel">Overzicht makers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMakersModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-inzendingen *ngIf="selectedAssignmentID" [assignment]="selectedAssignment"
+                         [assignmentID]="selectedAssignmentID"></app-inzendingen>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeMakersModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal opdracht toevoegen -->
+<div class="modal fade" id="opdrachtModal" tabindex="-1" role="dialog" aria-labelledby="opdrachtModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="opdrachtModalLabel">Voeg een opdracht toe</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form (ngSubmit)="toevoegenOpdracht()" [formGroup]="opdrachtForm">
+        <div class="modal-body">
+          <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+          <div class="form-group">
+            <label for="title" class="col-form-label">Titel:</label>
+            <input type="text" class="form-control" id="title" formControlName="title">
+          </div>
+          <div class="form-group">
+            <label for="description" class="col-form-label">Beschrijving:</label>
+            <input type="text" class="form-control" id="description" formControlName="description">
+          </div>
+          <div class="form-group">
+            <label for="closeDate" class="col-form-label">Eind datum:</label>
+            <input type="date" class="form-control" id="closeDate" formControlName="closeDate">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!opdrachtForm.valid || submitted">Opslaan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

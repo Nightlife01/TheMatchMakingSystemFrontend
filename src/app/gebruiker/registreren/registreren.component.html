@@ -1,0 +1,46 @@
+<div class="card myCard shadow-sm col-lg-4 col-sm-10 col-m-10 mt-5 myCard container justify-content-center">
+  <div class="card-body">
+    <div class=" pt-5">
+      <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+        <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+        <div *ngIf="accountActivationBool" class="text-success">{{accountActivationMessage}}</div>
+        <div class="form-group">
+          <h1>Registreren:</h1>
+
+          <div class="form-group">
+            <label for="role">Statuut:</label>
+            <select class="form-control" id="role" required formControlName="Role" [(ngModel)]="selectedUserRole">
+              <option hidden value="0" selected>Kies statuut...</option>
+              <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label for="firstName">Voornaam:</label>
+          <input type="text" class="form-control" id="firstName" placeholder="First name" formControlName="FirstName" />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Familienaam:</label>
+          <input type="text" class="form-control" id="lastName" placeholder="Last name" formControlName="LastName" />
+        </div>
+        <div class="form-group">
+          <label for="mail">E-mail:</label>
+          <input type="email" class="form-control" id="mail" placeholder="E-mail" formControlName="Email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Wachtwoord:</label>
+          <input type="password" class="form-control" id="password" placeholder="Password" formControlName="Password">
+        </div>
+        <div class="form-group">
+          <label for="controlpassword">Herhaal wachtwoord:</label>
+          <input type="password" class="form-control" id="controlpassword" placeholder="Repeat password"
+            formControlName="ControlPassword">
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3" [disabled]="!registrationForm.valid || submitted || selectedUserRole == 0">Registreren</button>
+        
+      </form>
+    </div>
+  </div>
+</div>

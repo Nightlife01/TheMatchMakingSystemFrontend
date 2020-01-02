@@ -1,0 +1,38 @@
+<div class="ml-3 mr-3 mt-3">
+  <div class="row">
+    <!--    -->
+    <!--    Linkerkant van de pagina-->
+    <!--    -->
+    <div>
+      <div class="col-2 filters">
+        <h2 >Filters:</h2>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+          <label class="form-check-label" for="defaultCheck1">
+            Default checkbox
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-right"></div>
+
+    <!--    -->
+    <!--    Rechterkant van de pagina-->
+    <!--    -->
+    <div class="col">
+      <h2 class="mb-3">Opdrachten</h2>
+      <input type="text" class="form-control mb-3" [(ngModel)]="searchText" placeholder="Zoeken...">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Opdracht Titel</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Opdracht soort (angular, html&css, react,...)</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <button type="button" class="btn btn-success">Opdracht bewerken</button>
+          <button type="button" class="btn btn-danger">Opdracht verwijderen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

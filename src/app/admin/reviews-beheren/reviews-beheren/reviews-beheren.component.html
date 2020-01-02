@@ -1,0 +1,90 @@
+<div class="container justify-content-center">
+  <h1>Reviews beheren</h1>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Reviews</h5>
+      <div class="card-text">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Reviewer ID</th>
+            <th scope="col">Ontvanger ID</th>
+            <th scope="col">Opdracht ID</th>
+            <th scope="col">Beschrijving</th>
+            <th scope="col">Like</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let review of (reviews | async)">
+            <td>{{review.reviewerID}}</td>
+            <td>{{review.receiverID}}</td>
+            <td>{{review.assignmentID}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.like}}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal"
+                      (click)="onClickBewerkReview(review)">Bewerk
+              </button>
+              <button type="button" class="btn btn-danger"
+                      (click)="onCLickVerwijderReview(review.reviewID)">Verwijder
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reviewModalLabel">ID: {{review?.reviewID}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form (ngSubmit)="onSubmit()" [formGroup]="reviewForm">
+            <div class="modal-body">
+              <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+              <div class="form-group">
+                <label for="reviewerID" class="col-form-label">ReviewerID:</label>
+                <input type="text" class="form-control" id="reviewerID"
+                       formControlName="reviewerID">
+              </div>
+              <div class="form-group">
+                <label for="receiverID" class="col-form-label">OntvangerID:</label>
+                <input type="text" class="form-control" id="receiverID"
+                       formControlName="receiverID">
+              </div>
+              <div class="form-group">
+                <label for="assignmentID" class="col-form-label">OpdrachtID:</label>
+                <input type="text" class="form-control" id="assignmentID"
+                       formControlName="assignmentID">
+              </div>
+              <div class="form-group">
+                <label for="description" class="col-form-label">Beschrijving:</label>
+                <input type="text" class="form-control" id="description"
+                       formControlName="description">
+              </div>
+              <div class="form-group">
+                <label for="inputGroupSelectCompany" class="col-form-label">Like:</label>
+                <select class="custom-select" id="inputGroupSelectCompany" formControlName="like">
+                  <option value="false">Geen like</option>
+                  <option value="true">Like</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!reviewForm.valid || submitted">Opslaan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

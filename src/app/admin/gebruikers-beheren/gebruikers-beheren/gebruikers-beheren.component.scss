@@ -1,0 +1,19 @@
+.customFlexContainer {
+    display: flex;
+    justify-content: space-between;
+    height: 0%;
+    align-items: center;
+  }
+
+  .userPresentationSpace{
+      width: 300px;
+  }
+  
+  button {
+    margin: 5px;
+  }
+
+  .modal-content, modal {
+      max-width: 380px;
+      padding: 20px;
+  }

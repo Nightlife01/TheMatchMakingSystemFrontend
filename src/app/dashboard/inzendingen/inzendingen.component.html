@@ -1,0 +1,28 @@
+<div class="container ">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nickname</th>
+                <th>Type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let maker of makers">
+                <td>
+                    {{maker.nickname}}
+                </td>
+                <td>
+                    {{maker.makerType.name}}
+                </td>
+
+                <td>
+                    <a class="btn btn-outline-secondary btn-sm" data-dismiss="modal" (click)="goToMakerProfile(maker.makerID)">
+                        Profiel bekijken</a><br/>
+                    <a class="btn btn-outline-success btn-sm mt-2" data-dismiss="modal" (click)="updateAssignment(maker.makerID)">
+                        Opdracht toewijzen</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

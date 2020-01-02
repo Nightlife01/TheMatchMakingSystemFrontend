@@ -1,0 +1,86 @@
+<div class="container justify-content-center">
+  <h1>Opdrachten beheren</h1>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Opdrachten</h5>
+      <div *ngIf="errorBool" class="text-danger">{{errorMessageDelete}}</div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#opdrachtModal"
+              (click)="onCLickToevoegenOpdracht()">Opdracht toevoegen
+      </button>
+      <div class="card-text">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Titel</th>
+            <th scope="col">Bedrijf ID</th>
+            <th scope="col">Beschrijving</th>
+            <th scope="col">Eind datum</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let opdracht of (opdrachten | async)">
+            <td>{{opdracht.title}}</td>
+            <td>{{opdracht.companyID}}</td>
+            <td>{{opdracht.description}}</td>
+            <td>{{opdracht.closeDate |  date:'MM/dd/yyyy'}}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#opdrachtModal"
+                      (click)="onClickBewerkOpdracht(opdracht)">Bewerk
+              </button>
+              <button type="button" class="btn btn-danger"
+                      (click)="onCLickVerwijderOpdracht(opdracht.assignmentID)">Verwijder
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal fade" id="opdrachtModal" tabindex="-1" role="dialog" aria-labelledby="opdrachtModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="opdrachtModalLabel">{{opdracht?.title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form (ngSubmit)="onSubmit()" [formGroup]="opdrachtForm">
+            <div class="modal-body">
+              <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+              <div class="form-group">
+                <label for="title" class="col-form-label">Titel:</label>
+                <input type="text" class="form-control" id="title"
+                       formControlName="title">
+              </div>
+              <div class="form-group">
+                <label for="inputGroupSelectCompany" class="col-form-label">Bedrijf:</label>
+                <select class="custom-select" id="inputGroupSelectCompany" formControlName="companyID">
+                  <option selected="selected">Kies...</option>
+                  <option *ngFor="let bedrijf of (bedrijven | async)"
+                          value="{{bedrijf.companyID}}">{{bedrijf.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="description" class="col-form-label">Beschrijving:</label>
+                <input type="text" class="form-control" id="description"
+                       formControlName="description">
+              </div>
+              <div class="form-group">
+                <label for="closeDate" class="col-form-label">Eind datum:</label>
+                <input type="date" class="form-control" id="closeDate" formControlName="closeDate" name="closeDate" [(ngModel)]="closeDate">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!opdrachtForm.valid || submitted">Opslaan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

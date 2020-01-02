@@ -1,0 +1,54 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fill">
+    <a class="navbar-brand" routerLink="/" routerLinkActive="active"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav navbar-right">
+        <li *ngIf="!aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/" routerLinkActive="active">Home</a>
+        </li>
+        <li *ngIf="!aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/login" routerLinkActive="active">Inloggen</a>
+        </li>
+        <li *ngIf="!aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/registreren" routerLinkActive="active">Registreren</a>
+        </li>
+        <li *ngIf="aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        </li>
+        <li *ngIf="aangemeld && isMaker && !isAdmin" class="nav-item">
+          <a class="nav-link link-1" routerLink="/gebruiker-opdrachten" routerLinkActive="active">Mijn opdrachten</a>
+        </li>
+        <li *ngIf="aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/profiel" routerLinkActive="active">Mijn profiel</a>
+        </li>
+        <li *ngIf="aangemeld && !isAdmin && isMaker" class="nav-item">
+          <a class="nav-link link-1" routerLink="/gebruiker-review" routerLinkActive="active">Reviews</a>
+        </li>
+        <li *ngIf="aangemeld && !isMaker" class="nav-item">
+          <a class="nav-link link-1" routerLink="/bedrijf-review" routerLinkActive="active">Bedrijf Reviews</a>
+        </li>
+        <li *ngIf="aangemeld && isAdmin" class="nav-item">
+          <a class="nav-link link-1" routerLink="/gebruikersBeheren" routerLinkActive="active">ADMIN gebruikers</a>
+        </li>
+        <li *ngIf="aangemeld && isAdmin" class="nav-item">
+          <a class="nav-link link-1" routerLink="/tagsBeheren" routerLinkActive="active">ADMIN tags</a>
+        </li>
+        <li *ngIf="aangemeld && isAdmin" class="nav-item">
+          <a class="nav-link link-1" routerLink="/reviewsBeheren" routerLinkActive="active">ADMIN review</a>
+        </li>
+        <li *ngIf="aangemeld && isAdmin" class="nav-item">
+          <a class="nav-link link-1" routerLink="/opdrachtenBeheren" routerLinkActive="active">ADMIN opdrachten</a>
+        </li>
+        <li *ngIf="aangemeld" class="nav-item">
+          <a class="nav-link link-1" routerLink="/" routerLinkActive="active" (click)="logOut()">Uitloggen</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+
+</div>

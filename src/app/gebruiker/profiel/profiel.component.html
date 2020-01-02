@@ -1,0 +1,137 @@
+<div class="container w-75">
+  <div class="">
+    <div class="card myCard shadow-sm mt-3 mb-5">
+      <div class="card-body">
+        <div class="pt-3 row justify-content-center">
+          <img style="width:17%; height:17%;" src="assets/images/interview.png">
+        </div>
+        <div class="pt-3 row justify-content-center">
+          <h1>Mijn profiel</h1>
+        </div>
+        <div *ngIf="errorBool" class="text-danger">{{errorMessage}}</div>
+        <div class="row">
+          <div class="col">
+          <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+            <div class="form-group">
+              <div class="form-group">
+                <label for="role">Statuut:</label>
+                <select class="form-control" id="role" formControlName="role">
+                  <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="firstName">Voornaam:</label>
+              <input type="text" class="form-control" id="firstName" placeholder="First name"
+                     formControlName="firstName"/>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Familienaam:</label>
+              <input type="text" class="form-control" id="lastName" placeholder="Last name" formControlName="lastName"/>
+            </div>
+            <div class="form-group">
+              <label for="mail">E-mail:</label>
+              <input type="email" class="form-control" id="mail" placeholder="E-mail" formControlName="email"/>
+            </div>
+            <div class="form-group">
+              <label for="password">Oud wachtwoord:</label>
+              <input type="password" class="form-control" id="oldPassword" placeholder="Oud password"
+                     formControlName="oldPassword">
+            </div>
+            <div class="form-group">
+              <label for="password">Nieuw wachtwoord:</label>
+              <input type="password" class="form-control" id="password" placeholder="Password"
+                     formControlName="password">
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3" [disabled]="!registrationForm.valid || submitted">
+              Bewerken
+            </button>
+          </form>
+          </div>
+          <div *ngIf="isCompany" class="col">
+          <form  (ngSubmit)="onSubmitCompany()" [formGroup]="companyForm">
+            <div class="form-group">
+              <label for="companyName">Bedrijfsnaam:</label>
+              <input type="text" class="form-control" id="companyName" placeholder="Bedrijfsnaam"
+                     formControlName="companyName" value="{{company.name}}">
+            </div>
+            <div class="form-group">
+              <label for="location">Locatie:</label>
+              <input type="text" class="form-control" id="location" placeholder="Locatie"
+                     formControlName="location">
+            </div>
+            <div class="form-group">
+              <label for="biography">Biografie:</label>
+              <input type="text" class="form-control" id="biography" placeholder="Biografie"
+                     formControlName="biography">
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3" [disabled]="!companyForm.valid || submitted">
+              Bewerken
+            </button>
+          </form>
+          </div>
+          <div *ngIf="isMaker" class="col">
+          <form (ngSubmit)="onSubmitMaker()" [formGroup]="makerForm">
+            <div class="form-group">
+              <label for="inputGroupSelectMakerType">Type:</label>
+              <select class="custom-select" id="inputGroupSelectMakerType" formControlName="makerTypeID">
+                <option hidden value="0" selected>Kies type...</option>
+                <option *ngFor="let makerType of (makerTypes | async)"
+                        value="{{makerType.makerTypeID}}">{{makerType.name}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="nickname">Nickname:</label>
+              <input type="text" class="form-control" id="nickname"
+                     formControlName="nickname">
+            </div>
+            <div class="form-group">
+              <label for="birthDate">Geboortedatum:</label>
+              <input type="date" class="form-control" id="birthDate"
+                     formControlName="birthDate" name="birthDate" [(ngModel)]="birthdate">
+            </div>
+            <div class="form-group">
+              <label for="biography">Biografie:</label>
+              <input type="text" class="form-control" id="biography"
+                     formControlName="biography">
+            </div>
+            <div class="form-group">
+              <label for="linkedIn">LinkedIn:</label>
+              <input type="text" class="form-control" id="linkedIn"
+                     formControlName="linkedIn">
+            </div>
+            <div class="form-group">
+              <label for="experience">Ervaring:</label>
+              <input type="text" class="form-control" id="experience"
+                     formControlName="experience">
+            </div>
+            <div class="form-group">
+              <label for="contactInfo">Contact info:</label>
+              <input type="text" class="form-control" id="contactInfo"
+                     formControlName="contactInfo">
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3" [disabled]="!makerForm.valid || submitted">
+              Bewerken
+            </button>
+          </form> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-success">Succesvol opgeslagen!</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onClosedHandled()" >Sluit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
